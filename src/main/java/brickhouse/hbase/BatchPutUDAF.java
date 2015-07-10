@@ -17,6 +17,7 @@ package brickhouse.hbase;
  **/
 
 import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hive.ql.exec.Description;
@@ -303,9 +304,9 @@ public class BatchPutUDAF extends AbstractGenericUDAFResolver {
             for (Put thePut : myagg.putList) {
                 ArrayList<String> kvList = new ArrayList<String>();
                 kvList.add(new String(thePut.getRow()));
-                Map<byte[], List<KeyValue>> familyMap = thePut.getFamilyMap();
-                for (List<KeyValue> innerList : familyMap.values()) {
-                    for (KeyValue kv : innerList) {
+                Map<byte[], List<Cell>> familyMap = thePut.getFamilyCellMap();
+                for (List<Cell> innerList : familyMap.values()) {
+                    for (Cell kv : innerList) {
                         kvList.add(new String(kv.getValue()));
                     }
                 }
